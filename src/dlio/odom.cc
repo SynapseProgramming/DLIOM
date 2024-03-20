@@ -2749,8 +2749,12 @@ void dlio::OdomNode::mapping()
                 voxelGrid.filter(*cloud_map);
 
                 // 更新历史关键帧
-                this->keyframes[i].first.first = iSAMCurrentEstimate.at<gtsam::Pose3>(
-                        i).translation().vector().cast<float>();
+                // this->keyframes[i].first.first = iSAMCurrentEstimate.at<gtsam::Pose3>(
+                //         i).translation().vector().cast<float>();
+
+                 this->keyframes[i].first.first = Eigen::Vector3f(iSAMCurrentEstimate.at<gtsam::Pose3>(i).translation().x(),
+                iSAMCurrentEstimate.at<gtsam::Pose3>(i).translation().y(),
+                iSAMCurrentEstimate.at<gtsam::Pose3>(i).translation().z());
                 this->keyframes[i].first.second.w() = iSAMCurrentEstimate.at<gtsam::Pose3>(i).rotation().toQuaternion().w();
                 this->keyframes[i].first.second.x() = iSAMCurrentEstimate.at<gtsam::Pose3>(i).rotation().toQuaternion().x();
                 this->keyframes[i].first.second.y() = iSAMCurrentEstimate.at<gtsam::Pose3>(i).rotation().toQuaternion().y();
@@ -2817,9 +2821,13 @@ void dlio::OdomNode::mapping()
         for (int i = 0; i < this->iSAMCurrentEstimate.size(); i++)
         {
             geometry_msgs::Pose p;
-            p.position.x = iSAMCurrentEstimate.at<gtsam::Pose3>(i).translation().vector().cast<float>()[0];
-            p.position.y = iSAMCurrentEstimate.at<gtsam::Pose3>(i).translation().vector().cast<float>()[1];
-            p.position.z = iSAMCurrentEstimate.at<gtsam::Pose3>(i).translation().vector().cast<float>()[2];
+            // p.position.x = iSAMCurrentEstimate.at<gtsam::Pose3>(i).translation().vector().cast<float>()[0];
+            // p.position.y = iSAMCurrentEstimate.at<gtsam::Pose3>(i).translation().vector().cast<float>()[1];
+            // p.position.z = iSAMCurrentEstimate.at<gtsam::Pose3>(i).translation().vector().cast<float>()[2];
+
+            p.position.x = static_cast<float>(iSAMCurrentEstimate.at<gtsam::Pose3>(i).translation().x());
+            p.position.y = static_cast<float>(iSAMCurrentEstimate.at<gtsam::Pose3>(i).translation().y());
+            p.position.z = static_cast<float>(iSAMCurrentEstimate.at<gtsam::Pose3>(i).translation().z());
 
             p.orientation.w = iSAMCurrentEstimate.at<gtsam::Pose3>(i).rotation().toQuaternion().w();
             p.orientation.x = iSAMCurrentEstimate.at<gtsam::Pose3>(i).rotation().toQuaternion().x();
@@ -3218,9 +3226,13 @@ void dlio::OdomNode::correctPoses()
             this->keyframes[i].first.second = this->iSAMCurrentEstimate.at<gtsam::Pose3>(i).rotation().toQuaternion().cast<float>();
 
             geometry_msgs::Pose p;
-            p.position.x = this->iSAMCurrentEstimate.at<gtsam::Pose3>(i).translation().vector().cast<float>()[0];
-            p.position.y = this->iSAMCurrentEstimate.at<gtsam::Pose3>(i).translation().vector().cast<float>()[1];
-            p.position.z = this->iSAMCurrentEstimate.at<gtsam::Pose3>(i).translation().vector().cast<float>()[2];
+            // p.position.x = this->iSAMCurrentEstimate.at<gtsam::Pose3>(i).translation().vector().cast<float>()[0];
+            // p.position.y = this->iSAMCurrentEstimate.at<gtsam::Pose3>(i).translation().vector().cast<float>()[1];
+            // p.position.z = this->iSAMCurrentEstimate.at<gtsam::Pose3>(i).translation().vector().cast<float>()[2];
+
+            p.position.x = static_cast<float>(this->iSAMCurrentEstimate.at<gtsam::Pose3>(i).translation().x());
+            p.position.y = static_cast<float>(this->iSAMCurrentEstimate.at<gtsam::Pose3>(i).translation().y());
+            p.position.z = static_cast<float>(this->iSAMCurrentEstimate.at<gtsam::Pose3>(i).translation().z());
 
             p.orientation.w = this->iSAMCurrentEstimate.at<gtsam::Pose3>(i).rotation().toQuaternion().w();
             p.orientation.x = this->iSAMCurrentEstimate.at<gtsam::Pose3>(i).rotation().toQuaternion().x();
@@ -3251,9 +3263,13 @@ void dlio::OdomNode::correctPoses()
     else
     {
         geometry_msgs::Pose p;
-        p.position.x = this->iSAMCurrentEstimate.at<gtsam::Pose3>(this->iSAMCurrentEstimate.size() - 1).translation().vector().cast<float>()[0];
-        p.position.y = this->iSAMCurrentEstimate.at<gtsam::Pose3>(this->iSAMCurrentEstimate.size() - 1).translation().vector().cast<float>()[1];
-        p.position.z = this->iSAMCurrentEstimate.at<gtsam::Pose3>(this->iSAMCurrentEstimate.size() - 1).translation().vector().cast<float>()[2];
+        // p.position.x = this->iSAMCurrentEstimate.at<gtsam::Pose3>(this->iSAMCurrentEstimate.size() - 1).translation().vector().cast<float>()[0];
+        // p.position.y = this->iSAMCurrentEstimate.at<gtsam::Pose3>(this->iSAMCurrentEstimate.size() - 1).translation().vector().cast<float>()[1];
+        // p.position.z = this->iSAMCurrentEstimate.at<gtsam::Pose3>(this->iSAMCurrentEstimate.size() - 1).translation().vector().cast<float>()[2];
+
+        p.position.x = static_cast<float>(this->iSAMCurrentEstimate.at<gtsam::Pose3>(this->iSAMCurrentEstimate.size() - 1).translation().x());
+        p.position.y = static_cast<float>(this->iSAMCurrentEstimate.at<gtsam::Pose3>(this->iSAMCurrentEstimate.size() - 1).translation().y());
+        p.position.z = static_cast<float>(this->iSAMCurrentEstimate.at<gtsam::Pose3>(this->iSAMCurrentEstimate.size() - 1).translation().z());
 
         p.orientation.w = this->iSAMCurrentEstimate.at<gtsam::Pose3>(this->iSAMCurrentEstimate.size() - 1).rotation().toQuaternion().w();
         p.orientation.x = this->iSAMCurrentEstimate.at<gtsam::Pose3>(this->iSAMCurrentEstimate.size() - 1).rotation().toQuaternion().x();
